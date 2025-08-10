@@ -3,12 +3,7 @@
 // CONFIGURATION
 const CONFIG = {
     // URLs for downloads and access (replace with actual links)
-    DOWNLOAD_URLS: {
-        pdf: 'https://your-domain.com/downloads/protocole-focus-guide.pdf',
-        mp3: 'https://your-domain.com/downloads/protocole-focus-audio.mp3'
-    },
-    
-    MEMBER_AREA_URL: 'https://your-domain.com/member-area/protocole-complet',
+
     LINKEDIN_URL: 'https://www.linkedin.com/company/elan-vital',
     
     // Particles configuration
@@ -120,8 +115,7 @@ const CONFIG = {
 const state = {
     hasUpsell: false,
     pageStartTime: Date.now(),
-    particlesInitialized: false,
-    downloadInProgress: false
+    particlesInitialized: false
 };
 
 // DOM ELEMENTS
@@ -237,106 +231,8 @@ function setupEventListeners() {
     }
 }
 
-// DOWNLOAD FUNCTIONS
-function downloadProduct(type) {
-    if (state.downloadInProgress) return;
-    
-    state.downloadInProgress = true;
-    
-    // Show loading modal
-    showModal('Préparation du téléchargement...', '⏳');
-    
-    // Track download event
-    trackEvent('product_download', {
-        product_type: type,
-        has_upsell: state.hasUpsell,
-        time_on_page: Math.round((Date.now() - state.pageStartTime) / 1000)
-    });
-    
-    // Simulate download preparation
-    setTimeout(() => {
-        const downloadUrl = CONFIG.DOWNLOAD_URLS[type];
-        
-        if (downloadUrl) {
-            // Create download link
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = `protocole-focus-${type}`;
-            link.target = '_blank';
-            
-            // Trigger download
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Show success message
-            showModal('Téléchargement démarré avec succès!', '✅');
-            
-            // Auto-close modal
-            setTimeout(() => {
-                closeModal();
-            }, 2000);
-            
-        } else {
-            showModal('Erreur: Lien de téléchargement non configuré', '❌');
-            setTimeout(() => {
-                closeModal();
-            }, 3000);
-        }
-        
-        state.downloadInProgress = false;
-    }, 1500);
-}
-
-// MEMBER AREA ACCESS
-function accessMemberArea() {
-    // Track access event
-    trackEvent('member_area_access', {
-        has_upsell: state.hasUpsell,
-        time_on_page: Math.round((Date.now() - state.pageStartTime) / 1000)
-    });
-    
-    // Show loading message
-    showModal('Redirection vers votre espace membre...', '🚀');
-    
-    // Redirect after animation
-    setTimeout(() => {
-        window.open(CONFIG.MEMBER_AREA_URL, '_blank');
-        closeModal();
-    }, 1500);
-}
 
 
-
-// MODAL FUNCTIONS
-function showModal(message, icon = '✅') {
-    if (!elements.successModal) return;
-    
-    const modalTitle = elements.successModal.querySelector('.modal-title');
-    const modalMessage = elements.successModal.querySelector('.modal-message');
-    const modalIcon = elements.successModal.querySelector('.modal-icon');
-    
-    if (modalTitle) modalTitle.textContent = 'Information';
-    if (modalMessage) modalMessage.textContent = message;
-    if (modalIcon) modalIcon.textContent = icon;
-    
-    elements.successModal.classList.remove('hidden');
-    
-    // Add entrance animation
-    setTimeout(() => {
-        elements.successModal.style.opacity = '1';
-    }, 10);
-}
-
-function closeModal() {
-    if (!elements.successModal) return;
-    
-    elements.successModal.style.opacity = '0';
-    
-    setTimeout(() => {
-        elements.successModal.classList.add('hidden');
-    }, 300);
-}
 
 // UTILITY FUNCTIONS
 function handleScrollAnimations() {
@@ -503,8 +399,7 @@ if (typeof window !== 'undefined') {
         checkUpsellStatus,
         showUpsellProduct,
         hideUpsellProduct,
-        downloadProduct,
-        accessMemberArea,
+
         followLinkedIn,
         trackEvent,
         CONFIG,
