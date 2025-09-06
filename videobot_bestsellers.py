@@ -454,11 +454,11 @@ class BestsellerVideoBotGUI:
                 left_frame.pack(side='left', fill='x', expand=True)
                 right_frame = ttk.Frame(fw_frame)
                 right_frame.pack(side='right')
-                ttk.Checkbutton(left_frame, text=f"📚 {framework_data.get('expert', 'Expert')} - {framework_data['name']}", variable=var, font=('Arial', 11, 'bold')).pack(anchor='w')
+                tk.Checkbutton(left_frame, text=f"📚 {framework_data.get('expert', 'Expert')} - {framework_data['name']}", variable=var, font=('Arial', 11, 'bold')).pack(anchor='w')
                 info_text = f"📖 {framework_data.get('book', 'Obra Principal')} | 🎯 {framework_data.get('focus', 'Foco Principal')}"
-                ttk.Label(left_frame, text=info_text, font=('Arial', 9), foreground='gray').pack(anchor='w', padx=20)
+                tk.Label(left_frame, text=info_text, font=('Arial', 9), foreground='gray').pack(anchor='w', padx=20)
                 structure_text = "Estrutura: " + " → ".join(framework_data['structure'][:3]) + "..."
-                ttk.Label(left_frame, text=structure_text, font=('Arial', 8), foreground='blue').pack(anchor='w', padx=20)
+                tk.Label(left_frame, text=structure_text, font=('Arial', 8), foreground='blue').pack(anchor='w', padx=20)
                 ttk.Button(right_frame, text="📋 Exemplo", command=lambda fk=framework_key: self.show_framework_example(fk), width=10).pack(pady=2)
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
@@ -482,8 +482,8 @@ class BestsellerVideoBotGUI:
             culture_item_frame.grid(row=row, column=col, sticky='w', padx=20, pady=5)
             var = tk.BooleanVar(value=(culture_code in ['pt-BR', 'en-US']))
             self.culture_vars[culture_code] = var
-            ttk.Checkbutton(culture_item_frame, text=culture_name, variable=var, font=('Arial', 10, 'bold')).pack(anchor='w')
-            ttk.Label(culture_item_frame, text=f"  {characteristics}", font=('Arial', 8), foreground='gray').pack(anchor='w')
+            tk.Checkbutton(culture_item_frame, text=culture_name, variable=var, font=('Arial', 10, 'bold')).pack(anchor='w')
+            tk.Label(culture_item_frame, text=f"  {characteristics}", font=('Arial', 8), foreground='gray').pack(anchor='w')
         advanced_frame = ttk.LabelFrame(frameworks_frame, text="⚙️ Configurações Avançadas:", padding=15)
         advanced_frame.pack(fill='x', padx=20, pady=10)
         options_row1 = ttk.Frame(advanced_frame)
@@ -842,6 +842,12 @@ class BestsellerVideoBotGUI:
         else:
             messagebox.showinfo("Info", "Exemplo MONSTER não disponível no momento.")
 
+    def clear_copy_input(self):
+        self.existing_copy_text.delete('1.0', tk.END)
+        self.copy_analysis_text.config(state='normal')
+        self.copy_analysis_text.delete('1.0', tk.END)
+        self.copy_analysis_text.config(state='disabled')
+
     # =============================
     # GERAÇÃO / RESULTADOS / STATUS
     # =============================
@@ -911,8 +917,8 @@ class BestsellerVideoBotGUI:
         apis_frame.pack(side='right', padx=10)
         openai_color = "green" if self.config.apis['openai'] else "red"
         gemini_color = "green" if self.config.apis['gemini'] else "red"
-        ttk.Label(apis_frame, text="OpenAI:", foreground=openai_color).pack(side='left')
-        ttk.Label(apis_frame, text="Gemini:", foreground=gemini_color).pack(side='left', padx=5)
+        tk.Label(apis_frame, text="OpenAI:", foreground=openai_color).pack(side='left')
+        tk.Label(apis_frame, text="Gemini:", foreground=gemini_color).pack(side='left', padx=5)
 
     # ====== geração / util ======
     def start_generation(self):
